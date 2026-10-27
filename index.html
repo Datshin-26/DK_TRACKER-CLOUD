@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DK-HAB_TRACK - Smart Habit &amp; Productivity App</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo">DK</span><b>DK-HAB_TRACK</b></div>
+  <nav id="nav">
+    <button data-view="dashboard" class="active">Dashboard</button>
+    <button data-view="habits">Habits</button>
+    <button data-view="calendar">Calendar</button>
+    <button data-view="analytics">Analytics</button>
+    <button data-view="gamification">Gamification</button>
+    <button data-view="mood">Mood &amp; Journal</button>
+    <button data-view="ai">AI Assistant</button>
+    <button data-view="reports">Reports</button>
+    <button data-view="settings">Settings</button>
+  </nav>
+  <div class="user"><span class="sync-status" id="syncStatus" role="status">Connecting…</span><span class="lvl" id="hdrLvl">Lvl 1</span><span id="hdrName">DK User</span><span class="avatar">👤</span></div>
+</header>
+
+<main>
+<!-- Dashboard -->
+<section id="dashboard" class="view active">
+  <div class="hero">
+    <small class="kicker">Daily growth &amp; productivity</small>
+    <h1>DK-HAB_TRACK</h1>
+    <p>Build consistency, track progress, earn achievements, and get smart insights every day.</p>
+  </div>
+  <div class="grid4">
+    <div class="card"><small>Daily Score</small><div class="big" id="scoreVal">0%</div><div class="bar"><div id="scoreBar"></div></div></div>
+    <div class="card"><small>Completed Today</small><div class="big" id="doneVal">0</div><small id="doneSub">of 0 habits</small></div>
+    <div class="card"><small>Active Habits</small><div class="big" id="activeVal">0</div><small>total</small></div>
+    <div class="card"><small>Tracker Status</small><div class="big status" id="statusVal">ACTIVE</div><small>Best Streak: <b id="bestStreak">0</b> days 🔥</small></div>
+  </div>
+  <div class="card xp-card">
+    <div><small>Gamification Progress</small><h3 id="lvlTitle">Level 1 Explorer</h3></div>
+    <div class="coins">🪙 <b id="coinVal">0</b> Coins</div>
+    <div class="xp-wrap"><div class="bar big-bar"><div id="xpBar"></div></div><small><span id="xpText">0 / 600 XP</span> • <span id="xpLeft">600 XP to Level Up!</span></small></div>
+  </div>
+  <div class="split">
+    <div class="card">
+      <div class="row-between"><div><h2>Today's Habits</h2><small>Tick a habit to complete it, or log the time spent</small></div>
+        <div class="btns"><button class="btn ghost" id="goAI">AI Smart Add</button><button class="btn primary" id="addHabitBtn">Add Habit</button></div></div>
+      <div id="todayList" class="list"></div>
+    </div>
+    <div class="side">
+      <div class="card quote"><p id="quoteText"></p><small id="quoteBy"></small></div>
+      <div class="card insight"><h4>💡 Habit Insight</h4><p id="insightText"></p></div>
+      <div class="card"><h4>Recent Activity</h4><ul id="activity" class="activity"></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- Habits -->
+<section id="habits" class="view">
+  <div class="row-between"><div><h2>Habit Management</h2><small>Search, filter, edit, archive, and create new habits</small></div><button class="btn primary" id="addHabitBtn2">Add New Habit</button></div>
+  <div class="filters">
+    <input type="text" id="hSearch" placeholder="Search habits…">
+    <select id="hCat"><option value="all">All Categories</option><option>Health</option><option>Fitness</option><option>Study</option><option>Work</option><option>Finance</option><option>Reading</option><option>Meditation</option></select>
+    <select id="hPri"><option value="all">All Priorities</option><option value="High">High Priority</option><option value="Medium">Medium Priority</option><option value="Low">Low Priority</option></select>
+  </div>
+  <div id="habitGrid" class="grid3"></div>
+</section>
+
+<!-- Calendar -->
+<section id="calendar" class="view">
+  <div class="split">
+    <div class="card">
+      <div class="row-between"><button class="btn ghost" id="prevM">‹</button><h2 id="monthTitle"></h2><div class="btns"><button class="btn ghost" id="todayM">Today</button><button class="btn ghost" id="nextM">›</button></div></div>
+      <div class="cal-head"><span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span></div>
+      <div id="calGrid" class="cal-grid"></div>
+    </div>
+    <div class="card"><small>Agenda</small><h3 id="agendaTitle">Today</h3><div id="agendaList" class="list"></div></div>
+  </div>
+</section>
+
+<!-- Analytics -->
+<section id="analytics" class="view">
+  <div class="split2">
+    <div class="card"><h3>Completion Trend (Last 7 Days)</h3><canvas id="trendChart" width="600" height="260"></canvas></div>
+    <div class="card"><h3>Habits by Category</h3><canvas id="catChart" width="600" height="260"></canvas><div id="catLegend" class="legend"></div></div>
+  </div>
+  <div class="card"><h3>Habit-Heat Map</h3><small>Daily habit completion consistency over the year</small><div class="heat-scroll"><div id="heatmap" class="heatmap"></div></div></div>
+</section>
+
+<!-- Gamification -->
+<section id="gamification" class="view">
+  <h2>Badges &amp; Achievements</h2><small>Unlock milestones by keeping daily habit streaks and logging activities</small>
+  <div id="badgeGrid" class="grid3 mt"></div>
+</section>
+
+<!-- Mood -->
+<section id="mood" class="view">
+  <div class="split2">
+    <div class="card"><h2>Daily Mood Tracker</h2><small>How are you feeling today?</small>
+      <div class="moods" id="moods">
+        <button data-m="Excellent">😄<span>Excellent</span></button><button data-m="Happy">😊<span>Happy</span></button><button data-m="Neutral">😐<span>Neutral</span></button><button data-m="Stressed">😫<span>Stressed</span></button><button data-m="Sad">😢<span>Sad</span></button>
+      </div>
+    </div>
+    <div class="card"><h2>Journal &amp; Reflection</h2><textarea id="journal" rows="7" placeholder="Write about your day, wins, and lessons…"></textarea><button class="btn primary mt" id="saveJournal">Save Journal Entry</button></div>
+  </div>
+</section>
+
+<!-- AI -->
+<section id="ai" class="view">
+  <div class="card">
+    <h2>Habit Generator &amp; Assistant</h2>
+    <p class="mute">Type a habit request in plain language and it will be turned into a structured habit. Try: <i>"Read 20 pages every evening"</i> or <i>"Run 5 km, high priority"</i>.</p>
+    <textarea id="aiInput" rows="3" placeholder="e.g. Drink 8 glasses of water daily"></textarea>
+    <button class="btn primary mt" id="aiGen">Generate Habit</button>
+    <div id="aiOut" class="ai-out hidden"></div>
+  </div>
+</section>
+
+<!-- Reports -->
+<section id="reports" class="view">
+  <div class="row-between"><div><h2>Habit Reports &amp; Export</h2><small>Generate detailed reports of your habit logs and export data</small></div>
+    <div class="btns"><button class="btn ghost" id="expCSV">Export to CSV</button><button class="btn primary" id="expPDF">Download PDF Summary</button></div></div>
+  <div class="card table-wrap"><table><thead><tr><th>Date</th><th>Habit Name</th><th>Category</th><th>Status</th><th>Time Spent</th></tr></thead><tbody id="reportBody"></tbody></table></div>
+</section>
+
+<!-- Settings -->
+<section id="settings" class="view">
+  <h2>Application Settings</h2>
+  <div class="card setting"><div><h4>Theme Mode</h4><small>Switch between Light and Dark mode interface</small></div><button class="btn primary" id="themeBtn">Toggle Theme</button></div>
+  <div class="card setting"><div><h4>Display Name</h4><small>Shown in the top bar</small></div><input type="text" id="nameInput"></div>
+  <div class="card setting"><div><h4>Reset Data</h4><small>Delete all habits, logs, XP and journal entries</small></div><button class="btn danger" id="resetBtn">Reset</button></div>
+</section>
+</main>
+
+<div class="modal hidden" id="habitModal"><div class="modal-box">
+  <div class="row-between"><h2 id="modalTitle">Add New Habit</h2><button class="x" id="closeModal">×</button></div>
+  <label>Habit Name<input type="text" id="fName" placeholder="e.g. Morning Run"></label>
+  <div class="two"><label>Category<select id="fCat"><option>Health</option><option>Fitness</option><option>Study</option><option>Work</option><option>Finance</option><option>Reading</option><option>Meditation</option></select></label>
+  <label>Priority<select id="fPri"><option>High</option><option selected>Medium</option><option>Low</option></select></label></div>
+  <div class="two"><label>Target Value<input type="number" id="fTarget" min="1" value="1"></label><label>Unit<input type="text" id="fUnit" placeholder="times, mins, pages…" value="times"></label></div>
+  <div class="btns end"><button class="btn ghost" id="cancelModal">Cancel</button><button class="btn primary" id="saveHabit">Save Habit</button></div>
+</div></div>
+<div id="toast" class="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>

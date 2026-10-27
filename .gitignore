@@ -1,0 +1,5 @@
+habit_tracker.db
+__pycache__/
+*.py[cod]
+.venv/
+venv/
